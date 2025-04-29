@@ -1,0 +1,37 @@
+name: CI-CD
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+  workflow_dispatch:
+
+env:
+  REGISTRY: ${{ secrets.AZURE_CONTAINER_REGISTRY }}
+  IMAGE_NAME: webscraper
+  PYTHON_VERSION: "3.11"
+
+jobs:
+  build-test-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Log in to ACR
+      uses: azure/docker-login@v2
+      with:
+        login-server: ${{ env.REGISTRY }}
+        username: ${{ secrets.ACR_USERNAME }}
+        password: ${{ secrets.ACR_PASSWORD }}
+
+    - name: Build & Push image
+      run: |
+        docker build -t $REGISTRY/$IMAGE_NAME:${{ github.sha }} .
+        docker push $REGISTRY/$IMAGE_NAME:${{ github.sha }}
+
+    - name: Deploy to Azure Web App
+      uses: azure/webapps-deploy@v3
+      with:
+        app-name: ${{ secrets.WEBAPP_NAME }}
+        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
