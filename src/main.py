@@ -1,29 +1,21 @@
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI
 from .api.routes import router
+from .auth.security import API_KEY_SCHEME_NAME
 
 openapi_components = {
     "securitySchemes": {
-        "OAuth2PasswordBearer": {
-            "type": "oauth2",
-            "flows": {
-                "password": {
-                    "tokenUrl": "auth/login",
-                    "scopes": {}
-                }
-            }
-        },
-        "ApiKeyAuth": {
+        API_KEY_SCHEME_NAME: {
             "type": "apiKey",
-            "in": "header",
+            "in": "header", 
             "name": "Authorization",
-            "description": "Insira o token JWT Bearer completo aqui. Exemplo: \"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\""
+            "description": "Insira o token JWT Bearer completo. Formato: \"Bearer SEU_TOKEN_JWT_AQUI\""
         }
     }
 }
 
 app = FastAPI(
     title="Web-Scraper API Embrapa",
-    openapi_components=openapi_components,
+    openapi_components=openapi_components
 )
 
 app.include_router(router, prefix="/api/v1")
