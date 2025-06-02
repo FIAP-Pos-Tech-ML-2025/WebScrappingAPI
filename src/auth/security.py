@@ -6,7 +6,7 @@ from typing import Optional
 
 from ..config import settings
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")
 
 class TokenData(BaseModel):
     username: Optional[str] = None
