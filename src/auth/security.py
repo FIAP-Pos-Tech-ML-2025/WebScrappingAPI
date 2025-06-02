@@ -45,7 +45,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme)) -> TokenData:
     return token_data
 
 async def get_current_user_from_header_for_swagger(
-    api_key: Optional[str] = Depends(api_key_header_scheme)
+    api_key: Optional[str] = Depends(api_key_header_auth_scheme)
 ) -> TokenData:
     if not api_key:
         raise HTTPException(

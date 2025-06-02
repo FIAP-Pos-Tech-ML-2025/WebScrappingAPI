@@ -1,6 +1,5 @@
 from fastapi import FastAPI, Depends
 from .api.routes import router
-from .auth.security import oauth2_scheme, api_key_header_scheme, ensure_authenticated
 
 openapi_components = {
     "securitySchemes": {
