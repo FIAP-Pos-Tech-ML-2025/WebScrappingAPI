@@ -1,14 +1,17 @@
 from fastapi import FastAPI
 from .api.routes import router
-from .auth.security import API_KEY_SCHEME_NAME
+from .auth.security import PROXY_LOGIN_ENDPOINT_FULL_PATH
 
 openapi_components = {
     "securitySchemes": {
-        API_KEY_SCHEME_NAME: {
-            "type": "apiKey",
-            "in": "header", 
-            "name": "Authorization",
-            "description": "Insira o token JWT Bearer completo. Formato: \"Bearer SEU_TOKEN_JWT_AQUI\""
+        "OAuth2PasswordBearerProxy": {
+            "type": "oauth2",
+            "flows": {
+                "password": {
+                    "tokenUrl": PROXY_LOGIN_ENDPOINT_FULL_PATH,
+                    "scopes": {}
+                }
+            }
         }
     }
 }
