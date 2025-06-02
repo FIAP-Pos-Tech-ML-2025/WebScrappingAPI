@@ -6,9 +6,11 @@ from . import comercializacao_controller
 from . import processamento_controller
 from . import importacao_controller
 from . import exportacao_controller
+from . import auth_controller
 
 router = APIRouter()
 
+router.include_router(auth_controller.router)
 router.include_router(producao_controller.router)
 router.include_router(comercializacao_controller.router)
 router.include_router(processamento_controller.router)

@@ -6,7 +6,7 @@ from typing import Optional
 
 from ..config import settings
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/dummy_login_path_for_oauth_spec")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login")
 
 API_KEY_SCHEME_NAME_FOR_SWAGGER = "BearerTokenAuth"
 api_key_header_for_swagger = APIKeyHeader(
