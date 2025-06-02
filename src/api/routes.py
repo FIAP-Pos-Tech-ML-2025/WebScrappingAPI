@@ -1,11 +1,19 @@
-from fastapi import APIRouter, Query, HTTPException
-from ..scraper.core import fetch
+from fastapi import APIRouter
+
+from . import producao_controller
+from . import comercializacao_controller
+from . import processamento_controller
+from . import importacao_controller
+from . import exportacao_controller
 
 router = APIRouter()
 
-@router.get("/scrape")
-async def scrape(query: str = Query(...)):
-    try:
-        return await fetch(query)
-    except Exception as exc:
-        raise HTTPException(status_code=500, detail=str(exc))
+router.include_router(producao_controller.router)
+router.include_router(comercializacao_controller.router)
+router.include_router(processamento_controller.router)
+router.include_router(importacao_controller.router)
+router.include_router(exportacao_controller.router)
+
+@router.get("/status", tags=["Status"])
+async def status_check():
+    return {"status": "ok"}

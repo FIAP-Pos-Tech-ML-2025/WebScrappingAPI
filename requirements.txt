@@ -1,7 +1,6 @@
 fastapi==0.111.*
 uvicorn[standard]==0.30.*
-httpx==0.27.*          # assíncrono e +moderno que requests
+httpx==0.27.*
 beautifulsoup4==4.12.*
-lxml==5.2.*
 pydantic-settings==2.2.*
 python-dotenv==1.0.*
