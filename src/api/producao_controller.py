@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Path, HTTPException
+from fastapi import APIRouter, Path, HTTPException, Depends
 from typing import List, Dict, Any
 
 from ..scraper.core import (
@@ -6,10 +6,12 @@ from ..scraper.core import (
     get_year_range,
     OPCAO_MAP
 )
+from ..auth.security import ensure_authenticated
 
 router = APIRouter(
     prefix="/producao",
-    tags=["Produção"]
+    tags=["Produção"],
+    dependencies=[Depends(ensure_authenticated)]
 )
 
 OPCAO_PRODUCAO = OPCAO_MAP["producao"]

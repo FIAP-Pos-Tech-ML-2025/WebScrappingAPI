@@ -12,9 +12,7 @@ __pycache__/
 venv/
 env/
 
-*.env
-!*.env.example
-.env.*        
+.env       
 
 .vscode/
 .idea/

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Path, HTTPException
+from fastapi import APIRouter, Path, HTTPException, Depends
 from typing import List, Dict, Any
 
 from ..scraper.core import (
@@ -6,13 +6,15 @@ from ..scraper.core import (
     get_year_range,
     OPCAO_MAP
 )
+from ..auth.security import ensure_authenticated
 
 router = APIRouter(
     prefix="/comercializacao",
-    tags=["Comercialização"]
+    tags=["Comercialização"],
+    dependencies=[Depends(ensure_authenticated)]
 )
 
-OPCAO_COMERCIALIZACAO = OPCAO_MAP["comercializacao"]
+OPCAO_COMERCIALIZacao = OPCAO_MAP["comercializacao"]
 SECTION_NAME_COMERCIALIZACAO_PT = "Comercialização"
 
 @router.get("/all",
@@ -21,7 +23,7 @@ SECTION_NAME_COMERCIALIZACAO_PT = "Comercialização"
             response_model=Dict[str, List[Dict[str, Any]]])
 async def get_comercializacao_all_years_route():
     try:
-        return await fetch_embrapa_data(section_opcao=OPCAO_COMERCIALIZACAO, all_years=True)
+        return await fetch_embrapa_data(section_opcao=OPCAO_COMERCIALIZacao, all_years=True)
     except Exception as exc:
         raise HTTPException(status_code=500, detail=f"Falha ao buscar todos os dados de {SECTION_NAME_COMERCIALIZACAO_PT}: {str(exc)}")
 
@@ -33,7 +35,7 @@ async def get_comercializacao_by_year_route(
     year: int = Path(..., title="Ano", description="O ano para o qual buscar os dados")
 ):
     try:
-        min_year, max_year = await get_year_range(section_opcao=OPCAO_COMERCIALIZACAO)
+        min_year, max_year = await get_year_range(section_opcao=OPCAO_COMERCIALIZacao)
         if min_year is None or max_year is None:
             raise HTTPException(status_code=404, detail=f"Não foi possível determinar o intervalo de anos para {SECTION_NAME_COMERCIALIZACAO_PT}.")
         if not (min_year <= year <= max_year):
@@ -41,7 +43,7 @@ async def get_comercializacao_by_year_route(
                 status_code=400,
                 detail=f"Ano {year} fora do intervalo para {SECTION_NAME_COMERCIALIZACAO_PT}. Intervalo disponível: [{min_year}-{max_year}]"
             )
-        return await fetch_embrapa_data(section_opcao=OPCAO_COMERCIALIZACAO, year_to_fetch=year)
+        return await fetch_embrapa_data(section_opcao=OPCAO_COMERCIALIZacao, year_to_fetch=year)
     except HTTPException as http_exc:
         raise http_exc
     except Exception as exc:
@@ -53,10 +55,10 @@ async def get_comercializacao_by_year_route(
             response_model=Dict[str, List[Dict[str, Any]]])
 async def get_comercializacao_latest_year_route():
     try:
-        _, max_year = await get_year_range(section_opcao=OPCAO_COMERCIALIZACAO)
+        _, max_year = await get_year_range(section_opcao=OPCAO_COMERCIALIZacao)
         if max_year is None:
             raise HTTPException(status_code=404, detail=f"Não foi possível determinar o último ano para {SECTION_NAME_COMERCIALIZACAO_PT}.")
-        return await fetch_embrapa_data(section_opcao=OPCAO_COMERCIALIZACAO, year_to_fetch=max_year)
+        return await fetch_embrapa_data(section_opcao=OPCAO_COMERCIALIZacao, year_to_fetch=max_year)
     except HTTPException as http_exc:
         raise http_exc
     except Exception as exc:

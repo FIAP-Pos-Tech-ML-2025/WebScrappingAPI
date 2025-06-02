@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Path, HTTPException
+from fastapi import APIRouter, Path, HTTPException, Depends
 from typing import List, Dict, Any
 
 from ..scraper.core import (
@@ -7,10 +7,12 @@ from ..scraper.core import (
     get_available_suboptions,
     OPCAO_MAP
 )
+from ..auth.security import ensure_authenticated
 
 router = APIRouter(
     prefix="/importacao",
-    tags=["Importação"]
+    tags=["Importação"],
+    dependencies=[Depends(ensure_authenticated)]
 )
 
 SECTION_NAME_PT = "Importação"

@@ -15,5 +15,5 @@ router.include_router(importacao_controller.router)
 router.include_router(exportacao_controller.router)
 
 @router.get("/status", tags=["Status"])
-async def status_check():
-    return {"status": "ok"}
+async def health_check():
+    return {"status": "ok", "message": "API de WebScraping da Embrapa está operacional."}
