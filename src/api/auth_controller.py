@@ -17,7 +17,7 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
     Logs in a user by forwarding credentials to the external authentication service
     and returns a JWT access token.
     """
-    auth_service_login_url = f"{settings.AUTH_SERVICE_URL.rstrip('/')}/token"
+    auth_service_login_url = f"{settings.AUTH_SERVICE_URL.rstrip('/')}/login"
 
     try:
         async with httpx.AsyncClient() as client:
